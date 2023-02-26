@@ -42,6 +42,7 @@ pfUI:RegisterModule("unitsort", function ()
     return key, t.__source[key]
   end
 
+  -- https://wowpedia.fandom.com/wiki/Orderedpairs
   local function orderedPairs(t, f)
     local keys, kn = {__source = t, __next = 1}, 1
     for k in pairs(t) do
@@ -63,6 +64,7 @@ pfUI:RegisterModule("unitsort", function ()
   end
 
   if C.unitsort.raidEnable == "1" then
+    -- Completely override the original OnUpdate function since we pretty much have to redo everything the original does anyway
     pfUI.uf.raid:SetScript("OnUpdate", function()
       -- don't proceed without raid or during combat
       if not UnitInRaid("player") or (InCombatLockdown and InCombatLockdown()) then return end
@@ -71,7 +73,7 @@ pfUI:RegisterModule("unitsort", function ()
       local maxraid = tonumber(C.unitframes.maxraid)
       for i=1, maxraid do SetRaidIndex(pfUI.uf.raid[i], 0) end
   
-      -- custom
+      -- Collect unit information (by which we can sort later) and group them by subgroup
       local groups = {}
   
       for i=1, GetNumRaidMembers() do
@@ -92,6 +94,7 @@ pfUI:RegisterModule("unitsort", function ()
         end
       end
   
+      -- Iterate over subgroups and sort units before adding them back
       for subgroup, units in pairs(groups) do
         for k, unit in orderedPairs(units, function(a,b) return sortUnitsCallback(units, a, b) end) do
           pfUI.uf.raid:AddUnitToGroup(unit.index, subgroup)
