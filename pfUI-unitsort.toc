@@ -1,0 +1,9 @@
+## Interface: 11200
+## Title: |cff33ffccpf|cffffffffUI|cffaaaaaa [Unit frame sorting]
+## Author: Hasn
+## Notes: Sorts the individual raid subgroups by name or class
+## Version: 1.0
+## Dependencies: pfUI
+
+# main
+pfUI-unitsort.lua
